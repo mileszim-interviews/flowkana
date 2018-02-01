@@ -1,3 +1,22 @@
-<h2 id="title">Welcome to Ember</h2>
+{{#bs-navbar type='inverse' as |navbar|}}
+  <div class="container">
+    <div class="navbar-header">
+      {{navbar.toggle}}
+      {{#link-to 'index' class='navbar-brand'}}Flow Kana Code Challenge{{/link-to}}
+    </div>
+    {{#navbar.content}}
+      {{#navbar.nav as |nav|}}
+        {{#nav.item}}
+          {{#nav.link-to "sql-query"}}SQL Query{{/nav.link-to}}
+        {{/nav.item}}
+        {{#nav.item}}
+          {{#nav.link-to "array-column"}}Array in Column Order{{/nav.link-to}}
+        {{/nav.item}}
+      {{/navbar.nav}}
+    {{/navbar.content}}
+  </div>
+{{/bs-navbar}}
 
-{{outlet}}
+<div class="container">
+  {{outlet}}
+</div>

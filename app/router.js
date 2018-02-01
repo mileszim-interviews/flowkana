@@ -7,6 +7,8 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('sql-query');
+  this.route('array-column');
 });
 
 export default Router;
