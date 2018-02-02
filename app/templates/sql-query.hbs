@@ -1,1 +1,55 @@
 <h1>SQL Query</h1>
+
+Example demonstration here: <a href="http://sqlfiddle.com/#!17/8f7f3/18">http://sqlfiddle.com/#!17/8f7f3/18</a>
+
+<br/><br/>
+
+<pre>SELECT
+  vendors.name as vendor,
+  COUNT(products.vendor_id) as product_count
+FROM
+  vendors
+LEFT OUTER JOIN
+  products
+ON
+  vendors.id = products.vendor_id
+GROUP BY
+  products.vendor_id, vendors.name
+ORDER BY
+  product_count DESC;
+</pre>
+
+<br/><br/>
+
+Code used to create tables (in case the fiddle link doesn't work):
+
+<br/><br/>
+
+<pre>CREATE TABLE vendors (
+  id integer PRIMARY KEY,
+  name varchar
+);
+
+CREATE TABLE products (
+  id integer PRIMARY KEY,
+  name varchar,
+  vendor_id integer REFERENCES vendors (id)
+);
+
+INSERT INTO vendors (id, name) VALUES
+  (1, 'Hmbldt'),
+  (2, 'Valhalla'),
+  (3, 'Kiva'),
+  (4, 'Pax'),
+  (5, 'Himalaya');
+
+INSERT INTO products (id, name, vendor_id) VALUES
+  (1, 'Sleep Pen', 1),
+  (2, 'Relax Pen', 1),
+  (3, 'CBD Gummies', 2),
+  (4, 'Indica Gummies', 2),
+  (5, 'Sativa Gummies', 2),
+  (6, 'Era Vape Pen', 4),
+  (7, 'Blue Dream Cartridge', 5),
+  (8, 'Sour Diesel Cartridge', 5);
+</pre>

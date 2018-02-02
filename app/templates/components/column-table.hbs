@@ -1,13 +1,11 @@
 <table class="table">
   <thead>
     <tr>
-      {{#each (#TODO)}}
-        <th><strong>{{num}}</strong</th>
-      {{/each}}
+      # TODO
     </tr>
   </thead>
   <tbody>
-    {{#each transposedColumnArray as |rowArray|}}
+    {{#each matrix as |rowArray|}}
       <tr>
         {{#each rowArray as |item|}}
           <td>{{item}}</td>

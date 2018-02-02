@@ -1,27 +1,44 @@
 import Component from '@ember/component';
-import Ember from 'ember';
+import { computed } from '@ember/object';
 import _array from 'lodash/array';
 
 export default Component.extend({
   columnArray: [],
   numColumns: 2,
+  rowHeader: [1, 2],
 
-  numFullColumns: Ember.computed('columnArray.[]', 'numColumns', function() {
+  numFullColumns: computed('columnArray.[]', 'numColumns', function() {
     return this.get('columnArray.length') % this.get('numColumns');
   }),
 
-  numShortColumns: Ember.computed('numFullColumns, numColumns', function() {
+  numShortColumns: computed('numFullColumns', 'numColumns', function() {
     return this.get('numColumns') - this.get('numFullColumns');
   }),
 
-  transposedColumnArray: Ember.computed('columnArray.@each', 'numColumns', 'numFullColumns', 'numShortColumns', function() {
-    let { columnArray, numColumns } = this.getProperties('columnArray', numColumns);
-    let chunked = _array.chunk(columnArray, numColomns);
-    let lastArray = chunked.get('lastObject');
-    for (let i = 0; i < (numColumns - lastArray.length); i++) {
-      lastArray.pushObject('');
-    }
-    chunked.set('lastObject', lastArray);
-    return _array.zip(chunked);
+  columnLength: computed('columnArray.[]', 'numColumns', function() {
+    if (this.get('columnArray.length') == 0) { return 0; }
+    return Math.ceil(this.get('columnArray.length')/this.get('numColumns'));
+  }),
+
+  matrix: computed('columnArray.@each', 'numColumns', 'columnLength', 'numFullColumns', 'numShortColumns', function() {
+    let m = [];
+    let i = 0;
+    let j = 0;
+    this.get('columnArray').forEach((item, index) => {
+      if (!m[i]) { m[i] = []; }
+      if (index % this.get('numFullColumns')) {
+        m[i][j] = item;
+      } else
+      if (index % this.get('numShortColumns')) {
+        if (item) { m[i][j] = item; }
+        m[i][j] = '';
+      }
+      j = j + 1;
+      if (j === (this.get('numColumns') - 1)) {
+        j = 0;
+        i = i + 1;
+      }
+    });
+    return m;
   })
 });

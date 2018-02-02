@@ -6,14 +6,16 @@ export default Controller.extend({
   columns: 2,
   csvArray: [],
   errorMsg: null,
+  tableTriggered: false,
 
   parseCSV(csvString) {
     return csvString.split(',').map(item => item.trim());
   },
 
   validateCSV(csvString) {
+    let csvArray = [];
     try {
-      let csvArray = this.parseCSV(csvString);
+      csvArray = this.parseCSV(csvString);
       if (csvArray.length < 1 || csvArray.length > 100) {
         this.set('csvErrorMsg', `CSV must have between 1 and 100 items. The current string has ${csvArray.length}`);
         return false;
@@ -28,13 +30,19 @@ export default Controller.extend({
 
   actions: {
     submitCSV(csvForm) {
-      const { csvString, columns } = csvForm.get('csvString', 'columns');
-      this.set('columns', columns);
+      this.set('tableTriggered', false);
+      const { csvString } = csvForm.getProperties('csvString');
+      let csvArray = this.validateCSV(csvString);
 
-      let csvArray = validateCSV(csvString);
       if (!csvArray) { return false; }
       this.set('csvArray', csvArray);
       this.set('errorMsg', null);
+      this.set('tableTriggered', true);
+    },
+
+    selectColumns(value, event) {
+      event.preventDefault();
+      this.set('columns', value);
     }
   }
 });
